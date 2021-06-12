@@ -1,6 +1,7 @@
-//exigindo modulos 
+//exigindo modulos
 const express = require('express');
 const mongoClient = require(`mongodb`).MongoClient;
+const objectIdDB = require(`mongodb`).ObjectId;
 const bodyParser = require('body-parser');
 const {body, validationResult} = require('express-validator');
 
@@ -43,10 +44,14 @@ function query(db,data){
         case `insert`:
             collection.insertOne(data.usuario,data.callback);
             break;
+        case `update`:
+            collection.update(data.usuario,data.update,data.options,data.callback);
+            break;
     };
 
 }
 
+//iniciando servidor na porta 3000
 app.listen(port);
 console.log(`servidor ON na porta ${port}`);
 
@@ -88,6 +93,7 @@ app.post(
         createConnection(dados);
 });
 
+// configurando route "/api" para a consulta de todas as  publicações via "GET"
 app.get('/api', (req, res)=>{
 
     //configurando a consulta das publicações no banco
@@ -115,6 +121,83 @@ app.get('/api', (req, res)=>{
     createConnection(dados)
 })
 
+//configurando route "/api/:id" para a consulta de uma publicação especifica via "GET"
+app.get(`/api/:id`, (req,res)=>{
+
+    const dados = {
+        operacao: `find`,
+        usuario: {_id: objectIdDB(req.params.id)},
+        collection: `publicacao`,
+        callback: (err,records) =>{
+            if(err){
+                res.status(500).json(err);
+            }else{
+
+                records.toArray( (err,records)=>{
+
+                    if(records.length == 0){
+                        res.status(400).json({mensagem: `publicacao nao existe!`});
+                    }else{
+
+                        res.status(200).json(records);
+                    }
+                })
+            }
+        }
+
+    };
+
+    createConnection(dados)
+})
+
+//configurando route "/api/:id" para a atualização de comentarios dentro da publicação via "PUT"
+app.put(
+    `/api/:id`,
+    body(`comentario`).notEmpty(),
+    (req,res) =>{
+
+        //recebendo dados da requisição
+        const dadosComentarios = req.body
+
+        // tratando dados recebidos
+        const errors = validationResult(req);
+        if(!errors.isEmpty()){
+
+            res.status(400).json({errors:errors});
+        }
+
+        //configurando o update de dados para o banco de dados
+
+        const dados = {
+            operacao: `update`,
+            usuario: {_id: objectIdDB(req.params.id)},
+            update: {
+                $push: {
+                    comentarios: {
+                        id_comentario : new objectIdDB(),
+                        comentario: dadosComentarios.comentario
+                    }
+                }
+            },
+            options: options = {
+                multi: true
+            },
+            collection: `publicacao`,
+            callback: (err,result) =>{
+                if(err){
+                    res.status(500).json(err)
+                }else{
+                    res.status(200).json(result)
+                }
+            }
+        }
+
+        console.log(dados.update)
+        createConnection(dados)
+    });
+
+
+
 //middleware que irá tratar possiveis erros nos status externos
 app.use(function(req, res, next){
 
@@ -123,7 +206,6 @@ app.use(function(req, res, next){
     next();
 });
 
-
 //middleware que irá tratar possiveis erros nos status internos
 app.use(function(req, res, next){
 
@@ -131,5 +213,4 @@ app.use(function(req, res, next){
 
     next();
 });
-
 

@@ -1,3 +1,8 @@
+# API-RESTFull
+Implementando uma API com os conceitos RESTFull que realizar a consulta e a inserção de publicações, atualização e remoção de comentarios dentro da publicação.
+
+    postman --> 'GET' http://localhost:3000/api : consultar todas as publicacações
+
 # Victor Montenegro 
 
 ## Olá, tudo bem! :wave:
