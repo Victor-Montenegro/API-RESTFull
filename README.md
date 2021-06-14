@@ -2,6 +2,14 @@
 Implementando uma API com os conceitos RESTFull que realizar a consulta e a inserção de publicações, atualização e remoção de comentarios dentro da publicação.
 
     postman --> 'GET' http://localhost:3000/api : consultar todas as publicacações
+    
+    postman --> 'PUSH' http://localhost:3000/api : inserir uma publicação (ex.: {titulo: "hello world", png_imagem: "hello.png"})
+    
+    postman --> 'PUT' http://localhost:3000/api/:id : atualizar a publicação( passando _id) com um comentario (ex.: {comentario: "hello"})
+
+    postman --> 'DELETE' http://localhost:3000/api/:id : remova de uma publicação um comentario( passando id_comentario) específico
+
+
 
 # Victor Montenegro 
 

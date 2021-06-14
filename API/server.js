@@ -134,12 +134,17 @@ app.get(`/api/:id`, (req,res)=>{
             }else{
 
                 records.toArray( (err,records)=>{
-
-                    if(records.length == 0){
-                        res.status(400).json({mensagem: `publicacao nao existe!`});
+                    
+                    if(err){
+                        res.status(500).json(err)
                     }else{
 
-                        res.status(200).json(records);
+                        if(records.length == 0){
+                            res.status(400).json({mensagem: `publicacao nao existe!`});
+                        }else{
+
+                            res.status(200).json(records);
+                        }
                     }
                 })
             }
@@ -157,7 +162,7 @@ app.put(
     (req,res) =>{
 
         //recebendo dados da requisição
-        const dadosComentarios = req.body
+        const dadosComentarios = req.body;
 
         // tratando dados recebidos
         const errors = validationResult(req);
@@ -185,32 +190,55 @@ app.put(
             collection: `publicacao`,
             callback: (err,result) =>{
                 if(err){
-                    res.status(500).json(err)
+                    res.status(500).json(err);
                 }else{
-                    res.status(200).json(result)
+                    res.status(200).json(result);
                 }
             }
         }
 
-        console.log(dados.update)
-        createConnection(dados)
+        createConnection(dados);
     });
 
+// configurando route "/api/:id" para a remoção de comentarios dentro da publicação 
+app.delete(`/api/:id`, (req,res)=>{
 
+    //configurando a remoção de comentarios para o banco de dados
+    const dados = {
+        operacao: `update`,
+        usuario: {},
+        update: {
+            pull: { comentarios: {id_comentario: objectIdDB(req.params.id)}}
+        },
+        collection: `publicacao`,
+        callback: (err, records) =>{
 
-//middleware que irá tratar possiveis erros nos status externos
-app.use(function(req, res, next){
+            if(err){
 
-    res.status(404).json({mensagem:"erro, nao foi possivel achar a pagina!"});
+                res.status(500).json(err)
+            }else{
 
-    next();
+                res.status(200).json(records)
+            }
+        }
+    };
+
+    createConnection(dados);
 });
 
-//middleware que irá tratar possiveis erros nos status internos
-app.use(function(req, res, next){
+// //middleware que irá tratar possiveis erros nos status externos
+// app.use(function(req, res, next){
 
-    res.status(500).json({mensagem:"erro no servidor!"});
+//     res.status(404).json({mensagem:"erro, nao foi possivel achar a pagina!"});
 
-    next();
-});
+//     next();
+// });
+
+// //middleware que irá tratar possiveis erros nos status internos
+// app.use(function(req, res, next){
+
+//     res.status(500).json({mensagem:"erro no servidor!"});
+
+//     next();
+// });
 
