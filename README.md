@@ -22,7 +22,7 @@ Implementando uma API com os conceitos RESTFull que realizar a consulta e a inse
 
  <br/> :purple_heart: Buscando colaborar com projetos no back-end.
  <br/> :blush: Com o que eu puder ajudar vou ajudar! Buscando juntos a resposta.
- <br/> :computer: O que pretendo aprender: javaScript, mongoDB, node.js, API Rast 
+ <br/> :computer: O que pretendo aprender: javaScript, mongoDB, node.js, API Rest, typeScript 
  <br/> 💬  &nbsp; Sobre mim: Curto tecnologias, games RPG, the witcher 3, seriados e animes. 
  <br/> :email: Entre em contato comigo: [![Linkedin Badge](https://img.shields.io/badge/-VictorMontenegro-blue?style=flat-square&logo=Linkedin&logoColor=white&link=https://https://www.linkedin.com/in/joao-victor-montenegro-595791194/)](https://www.linkedin.com/in/joao-victor-montenegro-595791194/) 
  [![Gmail Badge](https://img.shields.io/badge/-jvcmontenegro67@gmail.com-c14438?style=flat-square&logo=Gmail&logoColor=white&link=victor:jvcmontenegro67@gmail.com)](victor:jvcmontenegro67@gmail.com)
